@@ -1,3 +1,5 @@
+var spectrumAnalyserEnabled = true;
+
 const fps = 30;
 var previousFrameIndex = -1;
 const rectSize = 100;
@@ -58,7 +60,9 @@ let videopoc = {
                 }
             };
         }
-        if (tiger) tiger.rotate(3);
+
+        tiger.rotate(3);
+        
         for (var c of clones) {
             if (c) c.rotate(Math.random() * 10);
         }
@@ -96,7 +100,7 @@ window.onload = function () {
         tiger.opacity = 0.7;
         tiger.position = new paper.Point(tiger.bounds.width / 2 + 1100, tiger.bounds.height / 2 + 300)
 
-        for (var i = 0; i < 1; i++) {
+        for (var i = 0; i < 3; i++) {
             var clone = item.clone(true);
             clone.position = new paper.Point(Math.floor(Math.random() * 1920), Math.floor(Math.random() * 1080))
             clone.scale((i + 1) * .515 * 0.32, (i + 1) * .515 * 0.32)
@@ -126,7 +130,7 @@ window.onload = function () {
     function draw() {
 
         requestAnimationFrame(draw);
-
+        if (!spectrumAnalyserEnabled) return;
         analyser.getByteTimeDomainData(dataArray);
 
         canvasCtx.lineWidth = 2;
