@@ -68,7 +68,7 @@ let videopoc = {
   };
 
 document.addEventListener("DOMContentLoaded", () => {
-  processor.doLoad();
+  videopoc.doLoad();
 });
 
 window.onload = function() {
