@@ -10,6 +10,14 @@ var audioCtx;
 var paths;
 const frameCount = 60;
 
+const maxRectangleCount = 80;
+const initialRectangleCount = 40;
+var visibleRectangleCount = initialRectangleCount;
+
+const maxTigerCount = 10;
+const initialTigerCount = 1;
+var visibleTigerCount = initialTigerCount;
+
 let videopoc = {
 
     timerCallback: function () {
@@ -46,22 +54,20 @@ let videopoc = {
     drawFrame: function (frameIndex) {
         if (!paths) return;
         this.finalCanvasContext.drawImage(this.video, 0, 0, this.width, this.height);
-        for (var i = 0; i < 80; i++) {
+        for (var i = 0; i < visibleRectangleCount; i++) {
             var toAdd = (i > 40) ? 300 : 0;
             var toSubtract = (i > 40) ? 40 * 20 : 0;
             paths[i].position = new paper.Point(((frameIndex % frameCount) * 10) + (rectSize / 2) + toAdd, (rectSize / 2) + i * 20 - toSubtract);
-            if (i > 0) {
-                paths[i].rotate(3)
-                paths[i].scale(1.04, 1.04);
-                if (frameIndex % frameCount === 0 || paths[i].bounds.width > 400) {
-                    paths[i].bounds.width = rectSize;
-                    paths[i].bounds.height = rectSize;
-                }
-            };
+            paths[i].rotate(3)
+            paths[i].scale(1.04, 1.04);
+            if (frameIndex % frameCount === 0 || paths[i].bounds.width > 400) {
+                paths[i].bounds.width = rectSize;
+                paths[i].bounds.height = rectSize;
+            }
         }
-        
-        for (var t of tigers) {
-            if (t) t.rotate(3);
+
+        for (var i = 0; i < visibleTigerCount; i++) {
+            if (tigers[i]) tigers[i].rotate(3);
         }
         this.finalCanvasContext.imageSmoothingEnabled = false;
         this.finalCanvasContext.drawImage(offscreen, 0, 0, this.width, this.height);
@@ -76,36 +82,38 @@ window.onload = function () {
     const offscreen = document.getElementById("offscreen");
     paper.setup(offscreen);
     paths = []
-    for (var i = 0; i < 80; i++) {
+    for (var i = 0; i < maxRectangleCount; i++) {
         var rect = new paper.Rectangle(new paper.Point(0, i * 20), new paper.Size(rectSize, rectSize))
         var path = new paper.Path.Rectangle(rect, new paper.Size(20, 20));
-        // var path = new paper.Path.Rectangle(rect);
         path.strokeColor = '#AA602099';
-        // path.strokeColor = '#AA6020';
         path.strokeWidth = 10;
         path.fillColor = rainbow[i];
-        path.opacity = 0.1;
-        // path.fillColor = '#337337'
-        // path.strokeColor = 'white'
+        path.opacity = 0.2;
+        if (i >= initialRectangleCount) {
+            path.visible = false;
+        }
         paths.push(path);
     }
 
     var url = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/tiger.svg`
-    paper.project.importSVG(url, function (item) {
-        tiger = item
-        tiger.scale(0.5)
-        tiger.opacity = 0.7;
-        tiger.position = new paper.Point(tiger.bounds.width / 2 + 1100, tiger.bounds.height / 2 + 300)
+    if (maxTigerCount > 0) {
+        paper.project.importSVG(url, function (item) {
+            tiger = item
+            tiger.scale(0.5)
+            tiger.opacity = 0.7;
+            tiger.position = new paper.Point(tiger.bounds.width / 2 + 1100, tiger.bounds.height / 2 + 300)
+            if (initialTigerCount < 1) tiger.visible = false;
+            tigers.push(tiger)
 
-        tigers.push(tiger)
-
-        for (var i = 0; i < 3; i++) {
-            var clone = item.clone(true);
-            clone.position = new paper.Point(Math.floor(Math.random() * 1920), Math.floor(Math.random() * 1080))
-            clone.scale((i + 1) * .515 * 0.32, (i + 1) * .515 * 0.32)
-            tigers.push(clone);
-        }
-    })
+            for (var i = 1; i < maxTigerCount; i++) {
+                var clone = item.clone(true);
+                clone.position = new paper.Point(Math.floor(Math.random() * 1920), Math.floor(Math.random() * 1080))
+                clone.scale((i + 1) * .515 * 0.32, (i + 1) * .515 * 0.32)
+                if (i >= initialTigerCount) clone.visible = false;
+                tigers.push(clone);
+            }
+        })
+    }
 
     audioCtx = new AudioContext();
     var el = document.getElementById('audio');
