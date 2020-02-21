@@ -4,8 +4,7 @@ const fps = 30;
 var previousFrameIndex = -1;
 const rectSize = 100;
 const scaleFrames = 20;
-var tiger;
-var clones = [];
+var tigers = [];
 var audioSource;
 var audioCtx;
 var paths;
@@ -60,11 +59,9 @@ let videopoc = {
                 }
             };
         }
-
-        tiger.rotate(3);
         
-        for (var c of clones) {
-            if (c) c.rotate(Math.random() * 10);
+        for (var t of tigers) {
+            if (t) t.rotate(3);
         }
         this.finalCanvasContext.imageSmoothingEnabled = false;
         this.finalCanvasContext.drawImage(offscreen, 0, 0, this.width, this.height);
@@ -100,11 +97,13 @@ window.onload = function () {
         tiger.opacity = 0.7;
         tiger.position = new paper.Point(tiger.bounds.width / 2 + 1100, tiger.bounds.height / 2 + 300)
 
+        tigers.push(tiger)
+
         for (var i = 0; i < 3; i++) {
             var clone = item.clone(true);
             clone.position = new paper.Point(Math.floor(Math.random() * 1920), Math.floor(Math.random() * 1080))
             clone.scale((i + 1) * .515 * 0.32, (i + 1) * .515 * 0.32)
-            clones.push(clone);
+            tigers.push(clone);
         }
     })
 

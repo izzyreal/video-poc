@@ -4,7 +4,9 @@
 <head>
   <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.2/paper-full.min.js"></script>
+  <script type="text/javascript" src="js/keyboard.js"></script>
 </head>
+
 <style>
   body {
     background: black;
@@ -15,6 +17,14 @@
 <body>
 
   <div>
+    <div id="help" style="z-index: 1; position: absolute; left: 0px; top: 100px;">
+      <p>Show/hide help: h</p>
+      <p>Show/hide SVG tigers: t</p>
+      <p>Add/remove SVG tigers: 1/2</p>
+      <p>Show/hide PaperJS rects: r</p>
+      <p>Add/remove PaperJS rects: 3/4</p>
+      <p>Show/hide spectrum analysers: s</p>
+    </div>
     <div>
       <video id="video" style="width: 0; height: 0;" src="mp4/rectangle_2k.mp4" hidpi="on" autoplay="true" muted="true"
         loop="true" />
@@ -24,14 +34,6 @@
     <div style="position: absolute; left: 0px; top: 0px;">
       <canvas id="final" width="1920" height="1080" hidpi="off"></canvas>
     </div>
-    <div id="help" style="position: absolute; left: 0px; top: 100px;">
-        <p>Show/hide help: h</p>
-        <p>Show/hide SVG tigers: t</p>
-        <p>Add/remove SVG tigers: 1/2</p>
-        <p>Show/hide PaperJS rects: r</p>
-        <p>Add/remove PaperJS rects: 3/4</p>
-        <p>Show/hide spectrum analysers: s</p>
-    </div>
   </div>
 
   <audio style="position: absolute; left: 0px; top: 0px;" id="audio" controls crossorigin="anonymous">
@@ -39,7 +41,6 @@
   </audio>
 
   <script type="text/javascript" src="js/videopoc.js"></script>
-  <script type="text/javascript" src="js/keyboard.js"></script>
 
 </body>
 
