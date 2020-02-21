@@ -90,7 +90,6 @@ window.onload = function() {
   }
 
   var url = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/tiger.svg`
-  var url = `https://raw.githubusercontent.com/izzyreal/video-poc/master/apple.svg`
   paper.project.importSVG(url, function(item) {
     tiger = item
     tiger.scale(0.5)
