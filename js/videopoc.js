@@ -2,13 +2,17 @@ var spectrumAnalyserEnabled = true;
 
 const fps = 30;
 var previousFrameIndex = -1;
-const rectSize = 100;
 const scaleFrames = 20;
 var tigers = [];
 var audioSource;
 var audioCtx;
 var paths;
 const frameCount = 60;
+
+const initialRectSize = 100;
+const maxRectSize = 400;
+const rectDistance = 20;
+const rectBorderRadius = 10;
 
 const maxRectangleCount = 80;
 const initialRectangleCount = 40;
@@ -56,13 +60,13 @@ let videopoc = {
         this.finalCanvasContext.drawImage(this.video, 0, 0, this.width, this.height);
         for (var i = 0; i < visibleRectangleCount; i++) {
             var toAdd = (i > 40) ? 300 : 0;
-            var toSubtract = (i > 40) ? 40 * 20 : 0;
-            paths[i].position = new paper.Point(((frameIndex % frameCount) * 10) + (rectSize / 2) + toAdd, (rectSize / 2) + i * 20 - toSubtract);
+            var toSubtract = (i > 40) ? 40 * rectDistance : 0;
+            paths[i].position = new paper.Point(((frameIndex % frameCount) * 10) + (maxRectSize / 2) + toAdd, (maxRectSize / 2) + i * rectDistance - toSubtract);
             paths[i].rotate(3)
             paths[i].scale(1.04, 1.04);
-            if (frameIndex % frameCount === 0 || paths[i].bounds.width > 400) {
-                paths[i].bounds.width = rectSize;
-                paths[i].bounds.height = rectSize;
+            if (frameIndex % frameCount === 0 || paths[i].bounds.width > maxRectSize) {
+                paths[i].bounds.width = initialRectSize;
+                paths[i].bounds.height = initialRectSize;
             }
         }
 
@@ -83,8 +87,8 @@ window.onload = function () {
     paper.setup(offscreen);
     paths = []
     for (var i = 0; i < maxRectangleCount; i++) {
-        var rect = new paper.Rectangle(new paper.Point(0, i * 20), new paper.Size(rectSize, rectSize))
-        var path = new paper.Path.Rectangle(rect, new paper.Size(20, 20));
+        var rect = new paper.Rectangle(new paper.Point(0, i * rectDistance), new paper.Size(initialRectSize, initialRectSize))
+        var path = new paper.Path.Rectangle(rect, new paper.Size(rectBorderRadius, rectBorderRadius));
         path.strokeColor = '#AA602099';
         path.strokeWidth = 10;
         path.fillColor = rainbow[i];
