@@ -13,13 +13,18 @@
 
 <body>
   <div>
-    <!-- <button id='button'>Go</button> -->
-    <canvas id="offscreen" style="visibility: hidden; position: absolute; left: 0px; top: 0px;" width="1920"
-      height="1080" keepalive="true"></canvas>
-    <div style="position: absolute; left: 0px; top: 1000xp;">
-      <canvas id="final" width="1920" height="1080" hidpi="off"></canvas>
-    </div>
+  <button id='button'>Go</button>
+  <div>
+    <video id="video" style="width: 0; height: 0;" src="particles_2k.mp4" hidpi="on" autoplay="true" muted="true" loop="true"/>
   </div>
+  <canvas id="offscreen" style="visibility: hidden; position: absolute; left: 0px; top: 0px;" width="1920" height="1080" keepalive="true"></canvas>
+  <div style="position: absolute; left: 0px; top: 1000xp;">
+  <canvas id="final" width="1920" height="1080" hidpi="off"></canvas>
+</div>
+</div>
+<audio id="audio-source" controls crossorigin="anonymous">
+<source src="http://raw.githubusercontent.com/izzyreal/video-poc/master/fastcharger.mp3" type="audio/mpeg" cors="anonymous">
+</audio>
   <script type="text/javascript" src="js/videopoc.js"></script>
 </body>
 
