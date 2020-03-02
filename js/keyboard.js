@@ -17,6 +17,10 @@ document.addEventListener('keydown', function (event) {
                 }
             }
             break;
+        case 'b':
+            bonusMode = !bonusMode;
+            hideShow('audio')
+            break;
         case '1':
             if (visibleTigerCount == 0) return;
             visibleTigerCount -= 1;

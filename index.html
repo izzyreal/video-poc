@@ -26,10 +26,17 @@
       <p>Add/remove SVG tigers: 1/2</p>
       <p>Show/hide PaperJS rects: r</p>
       <p>Add/remove PaperJS rects: 3/4</p>
+      <p></p>
+      <p>Bonus mode: b</p>
+      <p></p>
       <p id="fps-p"></p>
     </div>
     <div>
-      <video id="video" style="width: 0; height: 0;" src="mp4/particles_2k.mp4" hidpi="on" autoplay="true" muted="true"
+      <video id="video" style="width: 0; height: 0;" src="mp4/rectangle_2k.mp4" hidpi="on" autoplay="true" muted="true"
+        loop="true" />
+    </div>
+    <div>
+      <video id="video-bonus" style="width: 0; height: 0;" src="mp4/particles_2k.mp4" hidpi="on" autoplay="true" muted="true"
         loop="true" />
     </div>
     <canvas id="offscreen" style="visibility: hidden; position: absolute; left: 0px; top: 0px;" width="1920"
@@ -37,9 +44,9 @@
     <div style="position: absolute; left: 0px; top: 0px;">
       <canvas id="final" width="1920" height="1080" hidpi="off"></canvas>
     </div>
-  </div>
+  </div> 
 
-  <audio style="position: absolute; left: 0px; top: 0px;" id="audio" controls crossorigin="anonymous">
+  <audio style="visibility: hidden; position: absolute; left: 0px; top: 0px;" id="audio" controls crossorigin="anonymous">
     <source src="mp3/8bit-perplexion.mp3" type="audio/mpeg" cors="anonymous">
   </audio>
 

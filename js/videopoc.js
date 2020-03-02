@@ -7,6 +7,7 @@ var tigers = [];
 var audioSource;
 var audioCtx;
 var paths;
+var refRect;
 const frameCount = 60;
 
 const initialRectSize = 100;
@@ -22,13 +23,16 @@ const maxTigerCount = 10;
 const initialTigerCount = 1;
 var visibleTigerCount = initialTigerCount;
 
+var bonusMode = false;
+
+function getVideo() {
+    return document.getElementById(bonusMode ? 'video-bonus' : 'video');
+}
+
 let videopoc = {
 
     timerCallback: function () {
-        if (this.video.paused || this.video.ended) {
-            return;
-        }
-        var frameIndex = Math.floor(this.video.currentTime * fps);
+        var frameIndex = Math.floor(getVideo().currentTime * fps);
 
         if (frameIndex != previousFrameIndex) {
             this.drawFrame(frameIndex);
@@ -44,20 +48,22 @@ let videopoc = {
     },
 
     doLoad: function () {
-        this.video = document.getElementById("video");
         this.finalCanvas = document.getElementById("final");
         this.finalCanvasContext = this.finalCanvas.getContext("2d");
+        this.finalCanvasContext.imageSmoothingEnabled = false;
         let self = this;
-        this.video.addEventListener("play", function () {
-            self.width = self.video.videoWidth;
-            self.height = self.video.videoHeight;
+        getVideo().addEventListener("play", function () {
             self.timerCallback();
         }, false);
     },
 
     drawFrame: function (frameIndex) {
         if (!paths) return;
-        this.finalCanvasContext.drawImage(this.video, 0, 0, this.width, this.height);
+        
+        const video = getVideo();
+        
+        if (video.paused) return;
+
         for (var i = 0; i < visibleRectangleCount; i++) {
             var toAdd = (i > 40) ? 300 : 0;
             var toSubtract = (i > 40) ? 40 * rectDistance : 0;
@@ -69,12 +75,14 @@ let videopoc = {
                 paths[i].bounds.height = initialRectSize;
             }
         }
+        refRect.position = new paper.Point(((frameIndex % frameCount) * 10 + (initialRectSize / 2)), initialRectSize / 2);
 
         for (var i = 0; i < visibleTigerCount; i++) {
             if (tigers[i]) tigers[i].rotate(3);
         }
-        this.finalCanvasContext.imageSmoothingEnabled = false;
-        this.finalCanvasContext.drawImage(offscreen, 0, 0, this.width, this.height);
+
+        this.finalCanvasContext.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        this.finalCanvasContext.drawImage(offscreen, 0, 0, video.videoWidth, video.videoHeight);
     }
 };
 
@@ -98,6 +106,10 @@ window.onload = function () {
         }
         paths.push(path);
     }
+
+    refRect = new paper.Path.Rectangle(new paper.Rectangle(new paper.Point(0, 0), new paper.Size(initialRectSize, initialRectSize)));
+    refRect.strokeColor = '#FFFFFF';
+    refRect.strokeWidth = 1;
 
     var url = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/tiger.svg`
     if (maxTigerCount > 0) {
@@ -141,7 +153,7 @@ window.onload = function () {
     function draw() {
 
         requestAnimationFrame(draw);
-        if (!spectrumAnalyserEnabled) return;
+        if (!spectrumAnalyserEnabled || !bonusMode) return;
         analyser.getByteTimeDomainData(dataArray);
 
         canvasCtx.lineWidth = 2;
